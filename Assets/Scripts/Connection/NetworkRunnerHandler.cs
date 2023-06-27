@@ -1,42 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
-using System;
-using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
+using System.Linq;
 
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] NetworkRunner _runnerPrefab;
+
     NetworkRunner _currentRunner;
 
-    public event Action OnJoinedLobby;
+    public event Action OnJoinedLobby = delegate { };
+    public event Action<List<SessionInfo>> OnSessionListUpdate = delegate { };
 
-    public event Action<List<SessionInfo>> OnSessionListUpdate;
-
-    void Start()
-    {
-        JoinLobby();
-    }
-
-    #region LOBBY
-
-    //Lo agregamos a un boton luego
+    #region Lobby
     public void JoinLobby()
     {
         if (_currentRunner) Destroy(_currentRunner.gameObject);
 
         _currentRunner = Instantiate(_runnerPrefab);
-
         _currentRunner.AddCallbacks(this);
-
         var clientTask = JoinLobbyTask();
     }
 
     async Task JoinLobbyTask()
     {
+
         var result = await _currentRunner.JoinSessionLobby(SessionLobby.Custom, "Normal Lobby");
 
         if (!result.Ok)
@@ -45,31 +38,31 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         }
         else
         {
-            Debug.Log("[Custom Msg] Lobby Joined");
+            Debug.Log("[Custom Msg] Joined Lobby");
 
-            OnJoinedLobby?.Invoke();
+            OnJoinedLobby();
         }
     }
 
     #endregion
 
-    #region CREATE/JOIN SESSION
+    #region Start-Join Game
 
-    //Lo agregamos a un boton luego
-    public void CreateSession(string sessionName, string sceneName)
+    public void CreateGame(string sessionName, string sceneName)
     {
-        var clientTask = InitializeSession(_currentRunner, GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"));
+        var clientTask = InitializeGame(_currentRunner, GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"));
     }
 
-    //Lo agregamos a un boton luego
-    public void JoinSession(SessionInfo sessionInfo)
+    public void JoinGame(SessionInfo sessionInfo)
     {
-        var clientTask = InitializeSession(_currentRunner, GameMode.Client, sessionInfo.Name, SceneManager.GetActiveScene().buildIndex); 
+        var clientTask = InitializeGame(_currentRunner, GameMode.Client, sessionInfo.Name, SceneManager.GetActiveScene().buildIndex);
     }
 
-    async Task InitializeSession(NetworkRunner runner, GameMode gameMode, string sessionName, SceneRef scene)
+    async Task InitializeGame(NetworkRunner runner, GameMode gameMode, string sessionName, SceneRef scene)
     {
         var sceneManager = runner.GetComponent<NetworkSceneManagerDefault>();
+
+        runner.ProvideInput = true;
 
         var result = await runner.StartGame(new StartGameArgs
         {
@@ -77,12 +70,13 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             Scene = scene,
             SessionName = sessionName,
             CustomLobbyName = "Normal Lobby",
-            SceneManager = sceneManager
+            SceneManager = sceneManager,
+            PlayerCount = 10
         });
 
         if (!result.Ok)
         {
-            Debug.LogError("[Custom Error] Unable to Start Game");
+            Debug.LogError("[Custom Error] Unable to start game");
         }
         else
         {
@@ -94,20 +88,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        OnSessionListUpdate?.Invoke(sessionList);
-
-        //Si hay alguna sesion ya creada, nos conectamos. Sino creamos una sala
-
-        //if (sessionList.Count > 0)
-        //{
-        //    SessionInfo session = sessionList[0];
-
-        //    JoinSession(session);
-        //}
-        //else
-        //{
-        //    CreateSession("Custom Game", "Game");
-        //}
+        OnSessionListUpdate(sessionList);
     }
 
     #region Unused Callbacks
@@ -140,6 +121,5 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-
     #endregion
 }

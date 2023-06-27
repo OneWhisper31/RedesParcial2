@@ -1,69 +1,95 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using UnityEngine.UI;
+using TMPro;
+using System;
 
 public class MainMenuHandler : MonoBehaviour
 {
     [SerializeField] NetworkRunnerHandler _networkHandler;
 
     [Header("Panels")]
-    [SerializeField] GameObject _initialPanel;
+    [SerializeField] GameObject _initPanel;
+    [SerializeField] GameObject _seshListHandler;
     [SerializeField] GameObject _statusPanel;
-    [SerializeField] GameObject _browserPanel;
     [SerializeField] GameObject _hostGamePanel;
 
     [Header("Buttons")]
     [SerializeField] Button _joinLobbyBTN;
-    [SerializeField] Button _openHostBTN;
+    [SerializeField] Button _openHostPanelBTN;
     [SerializeField] Button _hostGameBTN;
+    [SerializeField] Button _refreshButton;
 
-    [Header("Inputfields")]
-    [SerializeField] InputField _hostSessionName;
+
+    [Header("InputField")]
+    [SerializeField] TMP_InputField _hostSeshName;
 
     [Header("Texts")]
-    [SerializeField] Text _statusText;
-
+    [SerializeField] TextMeshProUGUI _statusText;
+    // Start is called before the first frame update
     void Start()
     {
-        //A cada boton que tenemos le agregamos por codigo el metodo que deberian ejecutar cuando son clickeados
-        _joinLobbyBTN.onClick.AddListener(BTN_JoinLobby);
-        _openHostBTN.onClick.AddListener(BTN_ShowHostPanel);
-        _hostGameBTN.onClick.AddListener(BTN_CreateGameSession);
 
-        //Cuando el Network Runner se termine de conectar al Lobby
-        //Le decimos mediante la suscripcion al evento que apague el Panel de Status y prenda el Browser
+        _joinLobbyBTN.onClick.AddListener(BTN_JoinLobby);
+
+        _openHostPanelBTN.onClick.AddListener(BTN_ShowHostPanel);
+
+        _hostGameBTN.onClick.AddListener(BTN_CreateGameSesh);
+
+        _refreshButton.onClick.AddListener(BTN_RefreshLobby);
+
+
         _networkHandler.OnJoinedLobby += () =>
         {
             _statusPanel.SetActive(false);
-            _browserPanel.SetActive(true);
+            _openHostPanelBTN.gameObject.SetActive(true);
+            _refreshButton.gameObject.SetActive(true);
+
         };
     }
 
-    #region Button Methods
+
+    void BTN_RefreshLobby()
+    {
+        _networkHandler.JoinLobby();
+        _statusPanel.SetActive(true);
+        _statusText.text = "Searching Games...";
+    }
+
+    void BTN_CreateGameSesh()
+    {
+        _networkHandler.CreateGame(_hostSeshName.text, "Game");
+    }
 
     void BTN_JoinLobby()
     {
         _networkHandler.JoinLobby();
 
-        _initialPanel.SetActive(false);
-
+        _initPanel.SetActive(false);
         _statusPanel.SetActive(true);
+        _seshListHandler.gameObject.SetActive(true);
 
-        _statusText.text = "Joining Lobby...";
+        _statusText.text = "Searching Games...";
     }
 
     void BTN_ShowHostPanel()
     {
-        _browserPanel.SetActive(false);
-
+        _seshListHandler.gameObject.SetActive(false);
         _hostGamePanel.SetActive(true);
     }
 
-    void BTN_CreateGameSession()
+    public void BTN_CloseLobbies()
     {
-        _networkHandler.CreateSession(_hostSessionName.text, "Game");
+        _seshListHandler?.gameObject.SetActive(false);
+        _initPanel?.SetActive(true);
     }
 
-    #endregion
+    public void BTN_CloseHost()
+    {
+        _hostGamePanel?.SetActive(false);
+        _seshListHandler?.gameObject.SetActive(true);
+    }
+
 }
