@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NicknameHandler : MonoBehaviour
 {
-    public static NicknameHandler Instance { get; private set; }
+    /*public static NicknameHandler Instance { get; private set; }
 
     [SerializeField] NicknameText _nicknamePrefab;
 
@@ -32,5 +32,5 @@ public class NicknameHandler : MonoBehaviour
         {
             nickname.UpdatePosition();
         }
-    }
+    }*/
 }

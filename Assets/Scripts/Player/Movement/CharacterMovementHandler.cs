@@ -44,7 +44,7 @@ public class CharacterMovementHandler : NetworkBehaviour
 
             _movementValue = _myCharacterController.Velocity.x;
 
-            _animator.Animator.SetFloat("MovementValue", _movementValue);
+            //_animator.Animator.SetFloat("MovementValue", _movementValue);
         }
     }
 

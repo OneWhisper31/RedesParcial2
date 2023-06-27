@@ -53,7 +53,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     void UpdateNickname(string newName)
     {
-        _myNickname.UpdateText(newName);
+        //_myNickname.UpdateText(newName);
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)

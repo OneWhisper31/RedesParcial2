@@ -92,9 +92,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b048031ca9da2a488ffbd67ec57e710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lobbyName: {fileID: 0}
-  _playerCount: {fileID: 0}
-  _joinBtn: {fileID: 0}
+  _lobbyName: {fileID: 9118449480476380877}
+  _playerCount: {fileID: 9118449481484729907}
+  _joinBtn: {fileID: 9118449481190550862}
 --- !u!1 &9118449480476380883
 GameObject:
   m_ObjectHideFlags: 0

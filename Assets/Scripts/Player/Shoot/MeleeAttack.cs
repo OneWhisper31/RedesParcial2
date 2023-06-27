@@ -2,22 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-
-public class Bullet : NetworkBehaviour
+public class MeleeAttack : NetworkBehaviour
 {
-    [SerializeField] NetworkRigidbody _myNetRgbd;
-
     TickTimer _expireTickTimer = TickTimer.None;
 
     public override void Spawned()
     {
-        _myNetRgbd = GetComponent<NetworkRigidbody>();
-
-        _myNetRgbd.Rigidbody.AddForce(transform.forward * 10, ForceMode.VelocityChange);
-
         if (Object.HasStateAuthority)
         {
             _expireTickTimer = TickTimer.CreateFromSeconds(Runner, 2f);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Object && Object.HasStateAuthority)
+        {
+            //Si tiene el componente de vida, ejecutar su TakeDamage(25f);
+            if (other.TryGetComponent(out LifeHandler lifeHandler))
+            {
+                lifeHandler.TakeDamage(60);
+            }
+
+            DespawnObject();
         }
     }
 
@@ -37,19 +44,5 @@ public class Bullet : NetworkBehaviour
         _expireTickTimer = TickTimer.None;
 
         Runner.Despawn(Object);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (Object && Object.HasStateAuthority)
-        {
-            //Si tiene el componente de vida, ejecutar su TakeDamage(25f);
-            if (other.TryGetComponent(out LifeHandler lifeHandler))
-            {
-                lifeHandler.TakeDamage(25);
-            }
-
-            DespawnObject();
-        }
     }
 }
