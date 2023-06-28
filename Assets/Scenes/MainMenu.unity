@@ -965,7 +965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _networkRunner: {fileID: 2030768799}
   _statusText: {fileID: 1784258724}
-  _sessionItemPrefab: {fileID: 5217978225486025507, guid: d630560c23df2ec4580098ef6fe4065b, type: 3}
+  _seshPrefab: {fileID: 5387371131916266293, guid: cc12af16a34492d4faf060145e146853, type: 3}
   _verticalLayoutGroup: {fileID: 1460737011}
 --- !u!1 &631822916
 GameObject:
@@ -1482,7 +1482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _networkRunner: {fileID: 2030768799}
   _statusText: {fileID: 1784258724}
-  _sessionItemPrefab: {fileID: 5217978225486025507, guid: d630560c23df2ec4580098ef6fe4065b, type: 3}
+  _seshPrefab: {fileID: 0}
   _verticalLayoutGroup: {fileID: 209560627}
 --- !u!1 &909093994
 GameObject:
