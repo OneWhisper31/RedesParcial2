@@ -43,8 +43,8 @@ public class MeleeHandler : NetworkBehaviour
 
         _lastMeleeAttack = Time.time;
 
-        //var attack = Runner.Spawn(_meleeAttack, MeleeAttackPosition.position, MeleeAttackPosition.transform.rotation);
-        //attack.transform.parent = MeleeAttackPosition;
+        var attack = Runner.Spawn(_meleeAttack, MeleeAttackPosition.position, MeleeAttackPosition.transform.rotation);
+        attack.transform.parent = MeleeAttackPosition;
 
         StartCoroutine(COR_Melee());
     }

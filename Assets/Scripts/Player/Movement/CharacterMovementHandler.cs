@@ -12,6 +12,8 @@ public class CharacterMovementHandler : NetworkBehaviour
     NetworkMecanimAnimator _animator;
 
     float _movementValue;
+    float _lastJump;
+
 
     void Awake()
     {
@@ -35,9 +37,9 @@ public class CharacterMovementHandler : NetworkBehaviour
 
             //SALTO
 
-            if (networkInputData.isJumpPressed)
+            if (networkInputData.isJumpPressed )
             {
-                _myCharacterController.Jump();
+                Jump();
             }
 
             //ANIMATOR
@@ -46,6 +48,16 @@ public class CharacterMovementHandler : NetworkBehaviour
 
             //_animator.Animator.SetFloat("MovementValue", _movementValue);
         }
+    }
+
+    void Jump()
+    {
+        if (Time.time - _lastJump < 1f) return;
+
+        _lastJump = Time.time;
+
+        _myCharacterController.Jump();
+
     }
 
     void Respawn()

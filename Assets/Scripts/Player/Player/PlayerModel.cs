@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class PlayerModel : NetworkBehaviour
+public class PlayerModel : NetworkBehaviour, IAfterSpawned
 {
     [SerializeField] NetworkRigidbody _rgbd;
     [SerializeField] Animator _animator;
@@ -42,6 +42,7 @@ public class PlayerModel : NetworkBehaviour
     //Action de actuaizacion de vida que vamos a usar para que el Handler/Manager de vidas flotantes se registre.
     public event Action<float> OnLifeUpdate = delegate { };
 
+    float _lastJump;
     void Start()
     {
         transform.forward = Vector3.right;
@@ -55,12 +56,18 @@ public class PlayerModel : NetworkBehaviour
 
     public override void Spawned()
     {
-        _life = 100;
+        ResetLife();
 
         var lifeManager = FindObjectOfType<LifebarManager>();
 
         lifeManager.SpawnBar(this);
 
+    }
+
+    
+    public void AfterSpawned()
+    {
+        ResetLife();
     }
 
     public override void FixedUpdateNetwork()
@@ -88,7 +95,7 @@ public class PlayerModel : NetworkBehaviour
         }
         if (networkInputData.isMeleePressed)
         {
-            Melee();
+            //Melee();
         }
     }
 
@@ -118,6 +125,10 @@ public class PlayerModel : NetworkBehaviour
 
     private void Jump()
     {
+        if (Time.time - _lastJump < 1f) return;
+
+        _lastJump = Time.time;
+
         _rgbd.Rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
     }
 
@@ -143,14 +154,14 @@ public class PlayerModel : NetworkBehaviour
 
         IsFiring = false;
     }
-    private void Melee()
+    /*private void Melee()
     {
         if (Time.time - _lastmeleeTime < 1f) return;
 
         _lastmeleeTime = Time.time;
 
         StartCoroutine(Melee_Cooldown());
-    }
+    }*/
 
     IEnumerator Melee_Cooldown()
     {
@@ -185,6 +196,7 @@ public class PlayerModel : NetworkBehaviour
         changed.Behaviour._melee.SetActive(changed.Behaviour.IsMelee);
     }
 
+
     static void ShootChangedCallback(Changed<PlayerModel> changed)
     {
         //Guardo el valor de IsFiring del frame actual
@@ -209,6 +221,13 @@ public class PlayerModel : NetworkBehaviour
 
     public void TakeDamage(float dmg)
     {
+        RPC_TakeDamage(dmg);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_TakeDamage(float dmg)
+    {
+        if (_life > _maxlife) _life = _maxlife;
         _life -= dmg;
 
         if (_life <= 0)
@@ -236,4 +255,5 @@ public class PlayerModel : NetworkBehaviour
     {
         OnPlayerDestroyed();
     }
+
 }

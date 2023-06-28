@@ -11,7 +11,7 @@ public class MeleeAttack : NetworkBehaviour {
 
         if (other.TryGetComponent(out PlayerModel otherPlayer))
         {
-            otherPlayer.TakeDamage(Mathf.Infinity);
+            otherPlayer.TakeDamage(100);
         }
     }
 }

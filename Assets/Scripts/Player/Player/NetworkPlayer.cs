@@ -15,8 +15,9 @@ public class NetworkPlayer : NetworkBehaviour
     private void Start()
     {
         player = GetComponent<PlayerModel>();
-        OnReset += player.ResetLife; 
+        OnReset += player.ResetLife;
     }
+
 
     public override void Spawned()
     {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,25 +5,42 @@ using UnityEngine.UI;
 
 public class Lifebar : MonoBehaviour
 {
+    [SerializeField] float _yOffset;
+    [SerializeField] Image _image;
+
     Transform _target;
 
-    [SerializeField] float _yOffset = 3;
-
-    [SerializeField] Image _myImage;
-
-    public Lifebar SetTarget(PlayerModel target)
+    public Lifebar SetTarget(PlayerModel player)
     {
-        _target = target.transform;
+        _target = player.transform;
 
-        target.OnLifeUpdate += UpdateLifeBar;
-        //target.OnPlayerDestroyed += () => Destroy(gameObject);
-
+        //player.OnPlayerDestroyed += () => Destroy(gameObject);
+        player.OnLifeUpdate += UpdateBar;
         return this;
     }
 
-    void UpdateLifeBar(float amount)
+    void UpdateBar(float amount)
     {
-        _myImage.fillAmount = amount;
+        StopAllCoroutines();
+
+        StartCoroutine(LerpAmount(amount));
+    }
+
+    IEnumerator LerpAmount(float amount)
+    {
+        float ticks = 0;
+
+        float startAmount = _image.fillAmount;
+
+        while (ticks <= 1)
+        {
+
+            _image.fillAmount = Mathf.Lerp(startAmount, amount, ticks / 4);
+
+            ticks += Time.deltaTime;
+
+            yield return null;
+        }
     }
 
     public void UpdatePosition()

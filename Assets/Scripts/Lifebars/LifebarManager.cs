@@ -5,27 +5,27 @@ using System;
 
 public class LifebarManager : MonoBehaviour
 {
-    [SerializeField] Lifebar _lifebarPrefab;
+    [SerializeField] Lifebar _lifeBarPrefab;
 
-    public event Action UpdateBars = delegate { };
+    public event Action OnUpdateBar = delegate { };
 
     public void SpawnBar(PlayerModel target)
     {
-        Lifebar lifebar = Instantiate(_lifebarPrefab, target.transform.position, Quaternion.identity, transform)
+        Lifebar lifebar = Instantiate(_lifeBarPrefab, target.transform.position, Quaternion.identity, transform)
                           .SetTarget(target);
 
-        UpdateBars += lifebar.UpdatePosition;
+        OnUpdateBar += lifebar.UpdatePosition;
 
-        target.OnPlayerDestroyed += () =>
-        {
-            UpdateBars -= lifebar.UpdatePosition;
+        target.OnPlayerDestroyed += () => {
 
-            Destroy(lifebar.gameObject);
+            OnUpdateBar -= lifebar.UpdatePosition;
+            Destroy(lifebar);
         };
     }
 
+    // Update is called once per frame
     void LateUpdate()
     {
-        UpdateBars();
+        OnUpdateBar();
     }
 }

@@ -24,10 +24,10 @@ public class GameManager : NetworkBehaviour
     {
         GM = GetComponent<GameManager>();
     }
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_OnEnd(string playerDeadID)
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         canvas.SetActive(true);
 
         loseSing.SetActive(false);
@@ -83,8 +83,8 @@ public class GameManager : NetworkBehaviour
 
             FindObjectsOfType<NetworkPlayer>().Map(x => x.transform.position = x.Object.HasInputAuthority ?
                             InitialPos1.position : InitialPos2.position);
-
-            NetworkPlayer.Local.player.ResetLife();
+            
+            NetworkPlayer.Local.player.TakeDamage(-2000);
             //StartCoroutine(ResetLevel());
         }
 
