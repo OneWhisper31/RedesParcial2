@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2813780237811124006}
   - component: {fileID: 2813780237811124007}
   - component: {fileID: 2813780237811124004}
-  - component: {fileID: 2813780237811124005}
+  - component: {fileID: 7849319595496264977}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -143,7 +143,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2813780237811124004}
-  - {fileID: 2813780237811124005}
+  - {fileID: 7849319595496264977}
   SimulationBehaviours: []
 --- !u!135 &2813780237811124006
 SphereCollider:
@@ -202,7 +202,7 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
---- !u!114 &2813780237811124005
+--- !u!114 &7849319595496264977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,8 +211,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2813780237811124002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dc38624d08cd3f4fb45b7be358f80ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 95e8c976731f6d949aaca047b9415dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _myNetRgbd: {fileID: 0}
+  _rgbd: {fileID: 2813780237811124004}
+  _speed: 25
+  _dmg: 25

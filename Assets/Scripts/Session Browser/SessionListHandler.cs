@@ -1,31 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Fusion;
+
 public class SessionListHandler : MonoBehaviour
 {
     [SerializeField] NetworkRunnerHandler _networkRunner;
 
     [SerializeField] TextMeshProUGUI _statusText;
 
-    [SerializeField] SessionInfoItem _seshPrefab;
+    [SerializeField] SessionItem _sessionItemPrefab;
 
     [SerializeField] VerticalLayoutGroup _verticalLayoutGroup;
 
-
-    // Start is called before the first frame update
-    void OnEnable()
+    private void OnEnable()
     {
-        _networkRunner.OnSessionListUpdate += ReceiveSeshList;
-
+        _networkRunner.OnSessionListUpdate += ReceiveSessionList;
     }
+
     private void OnDisable()
     {
-        _networkRunner.OnSessionListUpdate -= ReceiveSeshList;
+        _networkRunner.OnSessionListUpdate -= ReceiveSessionList;
     }
-    void ClearList()
+    
+    void ClearSessionList()
     {
         foreach (Transform child in _verticalLayoutGroup.transform)
         {
@@ -35,37 +34,46 @@ public class SessionListHandler : MonoBehaviour
         _statusText.gameObject.SetActive(false);
     }
 
-    void ReceiveSeshList(List<SessionInfo> lobbies)
+    void ReceiveSessionList(List<SessionInfo> newSessionList)
     {
-        ClearList();
-        if (lobbies.Count == 0)
+        //Limpiamos la lista de sesiones previamente creadas
+        ClearSessionList();
+
+        //Si no tenemos sesiones
+        if (newSessionList.Count == 0)
         {
-            NoSeshFound();
+            //Mostramos el texto diciendo que no se encontraron
+            NoSessionsFound();
         }
-        else
+        else //Sino
         {
-            foreach (SessionInfo item in lobbies)
+            //Agregamos cada sesion a la lista
+            foreach (var session in newSessionList)
             {
-                AddToList(item);
+                AddSessionToList(session);
             }
         }
     }
 
-    void AddToList(SessionInfo session)
+    void NoSessionsFound()
     {
-        var newSessionInfo = Instantiate(_seshPrefab, _verticalLayoutGroup.transform);
-        newSessionInfo.SetSeshInfo(session);
-        newSessionInfo.OnJoinSesh += JoinSelectedSesh;
-    }
+        _statusText.text = "No Sessions Found";
 
-    void JoinSelectedSesh(SessionInfo sesh)
-    {
-        _networkRunner.JoinGame(sesh);
-    }
-
-    void NoSeshFound()
-    {
-        _statusText.text = "NO LOBBIES FOUND";
         _statusText.gameObject.SetActive(true);
+    }
+
+    void AddSessionToList(SessionInfo session)
+    {
+        var newSessionItem = Instantiate(_sessionItemPrefab, _verticalLayoutGroup.transform);
+        newSessionItem.SetSessionInfo(session);
+
+        newSessionItem.OnJoinSession += JoinSelectedSession;
+    }
+
+    //Cuando se clickee el boton de Join en una sesion que tiene el buscador
+    //se va a ejecutar este metodo ya que lo registramos al evento dentro del Item
+    void JoinSelectedSession(SessionInfo session)
+    {
+        _networkRunner.JoinGame(session);
     }
 }

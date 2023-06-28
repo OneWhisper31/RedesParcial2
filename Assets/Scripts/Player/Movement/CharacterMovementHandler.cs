@@ -4,7 +4,7 @@ using UnityEngine;
 using Fusion;
 
 [RequireComponent(typeof(NetworkCharacterControllerCustom))]
-[RequireComponent(typeof(LifeHandler))]
+//[RequireComponent(typeof(LifeHandler))]
 public class CharacterMovementHandler : NetworkBehaviour
 {
     NetworkCharacterControllerCustom _myCharacterController;
@@ -17,10 +17,10 @@ public class CharacterMovementHandler : NetworkBehaviour
     {
         _myCharacterController = GetComponent<NetworkCharacterControllerCustom>();
 
-        var lifeHandler = GetComponent<LifeHandler>();
+        //var lifeHandler = GetComponent<LifeHandler>();
 
-        lifeHandler.OnDeadState += SetControllerEnabled;
-        lifeHandler.OnRespawn += Respawn;
+        //lifeHandler.OnDeadState += SetControllerEnabled;
+        //lifeHandler.OnRespawn += Respawn;
     }
 
     public override void FixedUpdateNetwork()

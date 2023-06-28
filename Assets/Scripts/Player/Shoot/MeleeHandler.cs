@@ -11,7 +11,7 @@ public class MeleeHandler : NetworkBehaviour
 
     float _lastMeleeAttack;
 
-    [SerializeField] LifeHandler _lifeHandler;
+    //[SerializeField] LifeHandler _lifeHandler;
 
     [SerializeField] NetworkObject _meleeAttack;
 
@@ -28,7 +28,7 @@ public class MeleeHandler : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (_lifeHandler.IsDead) return;
+        if (NetworkPlayer.Local.player.IsDead) return;
 
         if (GetInput(out NetworkInputData networkInputData))
         {

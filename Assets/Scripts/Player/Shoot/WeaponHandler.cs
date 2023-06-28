@@ -4,10 +4,10 @@ using UnityEngine;
 using Fusion;
 
 
-[RequireComponent(typeof(LifeHandler))]
+//[RequireComponent(typeof(LifeHandler))]
 public class WeaponHandler :  NetworkBehaviour
 {
-    [SerializeField] Bullet _bulletPrefab;
+    /*[SerializeField] Bullet _bulletPrefab;
     [SerializeField] Transform _firingTransform;
     [SerializeField] ParticleSystem _shootParticle;
 
@@ -58,7 +58,7 @@ public class WeaponHandler :  NetworkBehaviour
             {
                 hitInfo.Hitbox.transform.root.GetComponent<LifeHandler>()?.TakeDamage(25);
             }
-        }*/
+        }
 
         StartCoroutine(COR_Fire());
     }
@@ -89,5 +89,5 @@ public class WeaponHandler :  NetworkBehaviour
     void FireRemote()
     {
         _shootParticle.Play();
-    }
+    }*/
 }

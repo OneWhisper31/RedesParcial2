@@ -16,16 +16,13 @@ public class MeleeAttack : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (Object && Object.HasStateAuthority)
-        {
-            //Si tiene el componente de vida, ejecutar su TakeDamage(25f);
-            if (other.TryGetComponent(out LifeHandler lifeHandler))
-            {
-                lifeHandler.TakeDamage(60);
-            }
+        if (!Object || !Object.HasStateAuthority) return;
 
-            DespawnObject();
+        if (other.TryGetComponent(out PlayerModel otherPlayer))
+        {
+                otherPlayer.TakeDamage(Mathf.Infinity);
         }
+        DespawnObject();
     }
 
     public override void FixedUpdateNetwork()
