@@ -189,6 +189,7 @@ Transform:
   - {fileID: 5654717571336030278}
   - {fileID: 4875420048878393682}
   - {fileID: 6837997488260249965}
+  - {fileID: 5765784606566009195}
   m_Father: {fileID: 7231464966226836737}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -994,8 +995,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6837997488260249965}
   - component: {fileID: 5017459810537106688}
-  - component: {fileID: 321561734901543013}
-  - component: {fileID: 9160496382386559034}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -1032,50 +1031,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.92, z: 0.26}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &321561734901543013
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4879034383862448909}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 26
-  m_CollisionDetection: 0
---- !u!114 &9160496382386559034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4879034383862448909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1710889294, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  InterpolationSpace: 0
-  InterpolationTarget: {fileID: 8240372978777538193}
-  InterpolateErrorCorrection: 1
-  InterpolatedErrorCorrectionSettings:
-    MinRate: 3.3
-    MaxRate: 10
-    PosBlendStart: 0.25
-    PosBlendEnd: 1
-    PosMinCorrection: 0.025
-    PosTeleportDistance: 2
-    RotBlendStart: 0.1
-    RotBlendEnd: 0.5
-    RotTeleportRadians: 1.5
-  UseLegacySharedModeInterpolation: 0
-  TargetInterpolationDelay: 0.03
 --- !u!1 &5399243763553795234
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,7 +1084,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2808b79bfc0c9bb4ba6f5bc5e3f9ab4f, type: 2}
+  - {fileID: 2100000, guid: 1157684caf1eb71419712d51e8adf769, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1159,6 +1114,65 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5399243763553795234}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &7044725697144492470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5765784606566009195}
+  - component: {fileID: 7156457392145081705}
+  - component: {fileID: 1357894618156471436}
+  m_Layer: 0
+  m_Name: Melee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5765784606566009195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7044725697144492470}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.74, z: 1.239}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1256902965788410915}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7156457392145081705
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7044725697144492470}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.92, z: 0.62}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1357894618156471436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7044725697144492470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0908213d3f0a09645bdaddf34ff1c7b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
 --- !u!1 &7231464966226836739
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,7 +1241,7 @@ MonoBehaviour:
   - {fileID: 7231464966226836743}
   - {fileID: -8280833578655248281}
   - {fileID: 1113595630823810898}
-  - {fileID: 9160496382386559034}
+  - {fileID: 1357894618156471436}
   SimulationBehaviours: []
 --- !u!136 &7231464966226836736
 CapsuleCollider:
@@ -1335,11 +1349,13 @@ MonoBehaviour:
   _bulletPrefab: {fileID: 7849319595496264977, guid: e64b950e437487947a5d2eb0449fcd9d, type: 3}
   _shootParticle: {fileID: 2160799791594477452}
   _shield: {fileID: 4879034383862448909}
+  _melee: {fileID: 7044725697144492470}
   _firePosition: {fileID: 4875420048878393682}
   __life: 100
   _speed: 6
   _jumpForce: 6
-  _protectCooldown: 1
+  _protectCooldown: 0.4
+  _maxlife: 100
 --- !u!114 &-8280833578655248281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1379,8 +1395,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _meleeAttack: {fileID: 7190836885007650996, guid: 738c3af6e0185574aafc572fede1d6d9, type: 3}
-  MeleeAttackPosition: {fileID: 375659030025739571}
 --- !u!1 &7765862383734756661
 GameObject:
   m_ObjectHideFlags: 0

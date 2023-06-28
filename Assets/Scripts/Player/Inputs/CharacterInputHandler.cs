@@ -8,6 +8,7 @@ public class CharacterInputHandler : MonoBehaviour
 
     bool _isJumpPressed;
     bool _isFirePressed;
+    bool _isProtectPressed;
     bool _isMeleePressed;
     NetworkInputData _inputData;
 
@@ -24,13 +25,17 @@ public class CharacterInputHandler : MonoBehaviour
         {
             _isJumpPressed = true;
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        else if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             _isFirePressed = true;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftControl))
+        else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             _isMeleePressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _isProtectPressed = true;
         }
     }
 
@@ -43,6 +48,9 @@ public class CharacterInputHandler : MonoBehaviour
 
         _inputData.isFirePressed = _isFirePressed;
         _isFirePressed = false;
+
+        _inputData.isProtectPressed = _isProtectPressed;
+        _isProtectPressed = false;
 
         _inputData.isMeleePressed = _isMeleePressed;
         _isMeleePressed = false;

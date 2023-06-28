@@ -11,20 +11,24 @@ public class PlayerModel : NetworkBehaviour
     [SerializeField] Bullet _bulletPrefab;
     [SerializeField] ParticleSystem _shootParticle;
     [SerializeField] GameObject _shield;
+    [SerializeField] GameObject _melee;
     [SerializeField] Transform _firePosition;
 
     [Networked(OnChanged = nameof(LifeChangedCallback))]
-    [SerializeField] float _life { get; set; }
+    [SerializeField] float _life { get; set; } public float Life { get { return _life; } }
     [SerializeField] float _speed;
     [SerializeField] float _jumpForce, _protectCooldown;
-    [SerializeField] float _maxlife { get; set; }
+    [SerializeField] float _maxlife;
 
     public bool IsDead{get{ return _life <= 0; }}
 
-    float _lastFireTime,_lastProtectTime;
+    float _lastFireTime, _lastmeleeTime, _lastProtectTime;
     
     [Networked(OnChanged = nameof(ShootChangedCallback))]
     bool IsFiring { get; set; }
+
+    [Networked(OnChanged = nameof(MeleeChangedCallback))]
+    bool IsMelee { get; set; }
 
 
     [Networked(OnChanged = nameof(ProtectChangedCallback))]
@@ -82,6 +86,10 @@ public class PlayerModel : NetworkBehaviour
         {
             Protect();
         }
+        if (networkInputData.isMeleePressed)
+        {
+            Melee();
+        }
     }
 
     private void Movement(float xAxi)
@@ -135,6 +143,24 @@ public class PlayerModel : NetworkBehaviour
 
         IsFiring = false;
     }
+    private void Melee()
+    {
+        if (Time.time - _lastmeleeTime < 1f) return;
+
+        _lastmeleeTime = Time.time;
+
+        StartCoroutine(Melee_Cooldown());
+    }
+
+    IEnumerator Melee_Cooldown()
+    {
+
+        IsMelee = true;
+
+        yield return new WaitForSeconds(1f);
+
+        IsMelee = false;
+    }
 
     private void Protect()
     {
@@ -153,7 +179,12 @@ public class PlayerModel : NetworkBehaviour
 
         IsProtecting = false;
     }
-    
+    static void MeleeChangedCallback(Changed<PlayerModel> changed)
+    {
+        
+        changed.Behaviour._melee.SetActive(changed.Behaviour.IsMelee);
+    }
+
     static void ShootChangedCallback(Changed<PlayerModel> changed)
     {
         //Guardo el valor de IsFiring del frame actual
@@ -198,7 +229,7 @@ public class PlayerModel : NetworkBehaviour
     }
     void Dead()
     {
-        GameManager.GM.RPC_OnEnd(Runner.GetPlayerUserId());
+        GameManager.GM.RPC_OnEnd(NetworkPlayer.Local.Runner.GetPlayerUserId());
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)

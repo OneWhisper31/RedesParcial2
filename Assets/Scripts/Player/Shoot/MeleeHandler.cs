@@ -11,8 +11,6 @@ public class MeleeHandler : NetworkBehaviour
 
     float _lastMeleeAttack;
 
-    //[SerializeField] LifeHandler _lifeHandler;
-
     [SerializeField] NetworkObject _meleeAttack;
 
     [SerializeField] Transform MeleeAttackPosition;
@@ -45,8 +43,8 @@ public class MeleeHandler : NetworkBehaviour
 
         _lastMeleeAttack = Time.time;
 
-        var attack = Runner.Spawn(_meleeAttack, MeleeAttackPosition.position, MeleeAttackPosition.transform.rotation);
-        attack.transform.parent = MeleeAttackPosition;
+        //var attack = Runner.Spawn(_meleeAttack, MeleeAttackPosition.position, MeleeAttackPosition.transform.rotation);
+        //attack.transform.parent = MeleeAttackPosition;
 
         StartCoroutine(COR_Melee());
     }
@@ -55,7 +53,7 @@ public class MeleeHandler : NetworkBehaviour
     {
         IsPunching = true;
 
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(1f);
 
         IsPunching = false;
     }

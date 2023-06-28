@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using TMPro;
+using System.Linq;
 
 public class GameManager : NetworkBehaviour
 {
     public static GameManager GM { get; private set; }
 
     [SerializeField] TextMeshProUGUI _textRestarting;
-    public TextMeshProUGUI _textConnecting;
+    public TextMeshProUGUI _textConnecting,_textPlayers;
 
     public Transform InitialPos1;
     public Transform InitialPos2;
@@ -23,7 +24,6 @@ public class GameManager : NetworkBehaviour
     {
         GM = GetComponent<GameManager>();
     }
-
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_OnEnd(string playerDeadID)
     {
@@ -35,12 +35,12 @@ public class GameManager : NetworkBehaviour
 
         string playerID= NetworkPlayer.Local.Runner.GetPlayerUserId();
 
-        if (playerDeadID == playerID)
+        if (NetworkPlayer.Local.player.Life <= 0)
             loseSing.SetActive(true);
         else
             winSing.SetActive(true);
 
-        if(!OnReplayReady.ContainsKey(NetworkPlayer.Local.Runner.GetPlayerUserId()))
+        if(!OnReplayReady.ContainsKey(playerID))
             OnReplayReady.Add(playerID, false);//Seteo el dicionario para poner que ninguno de los dos esta listo para reiniciar
 
         foreach (var item in OnReplayReady)
@@ -71,11 +71,14 @@ public class GameManager : NetworkBehaviour
     public void RPC_OnResetLevel(string IDisReady)
     {
         OnReplayReady[IDisReady] = true;
-        
+        _textPlayers.text = $"{OnReplayReady.Where(x => x.Value).Count()}/2";
+
+
 
         if (IsEveryOneReadyToReset())
         {
             OnReplayReady = new Dictionary<string, bool>();
+            _textPlayers.text = "0/2";
             OnQuitEndScreen();
 
             FindObjectsOfType<NetworkPlayer>().Map(x => x.transform.position = x.Object.HasInputAuthority ?
